@@ -120,15 +120,6 @@ CREATE TABLE media (
 );
 DESCRIBE media;
 
-
-
-CREATE TABLE post_types (
-  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(45) NOT NULL -- храним типы: фото, музыка, документы
-);
-DESCRIBE post_types;
-
-
 CREATE TABLE post (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- id пост
   user_id BIGINT UNSIGNED NOT NULL, -- id кто выложил пост
@@ -138,20 +129,36 @@ CREATE TABLE post (
   update_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   INDEX fk_post_users_idx (user_id),
   INDEX fk_post_created_at_idx (created_at),
-  CONSTRAINT fk_post_users FOREIGN KEY (user_id) REFERENCES users (id), --
-  CONSTRAINT fk_post_post_types FOREIGN KEY (post_types_id) REFERENCES post_types (id)
+  CONSTRAINT fk_post_users FOREIGN KEY (user_id) REFERENCES users (id)
+  
 );
 DESCRIBE post;
 
+-- только хозяин странички может выгладывать медиа-посты на своей стене, поэтому опустила user_id 
+CREATE TABLE posts_media (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- картинка 1
+  posts_media_types_id INT UNSIGNED NOT NULL,  
+  file_name VARCHAR(245) DEFAULT NULL,
+  file_size BIGINT DEFAULT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  update_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  INDEX fk_posts_media_media_types_idx (posts_media_types_id),
+  CONSTRAINT fk_posts_media_media_types FOREIGN KEY (posts_media_types_id) REFERENCES media_types (id)
+);
+DESCRIBE posts_media;
+
 CREATE TABLE likes (
-  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- 
   from_user_id BIGINT UNSIGNED NOT NULL, -- от пользователя 
-  to_post_id BIGINT UNSIGNED NOT NULL, -- к посту  
+  to_post_id BIGINT UNSIGNED NOT NULL,-- к посту 
+  PRIMARY KEY (from_user_id, to_post_id), -- составной ключ
   INDEX fk_likes_to_post_idx (to_post_id),
-  CONSTRAINT fk_from_user_id FOREIGN KEY (from_user_id) REFERENCES users (id)
+  CONSTRAINT fk_from_user_id FOREIGN KEY (from_user_id) REFERENCES users (id),
+  CONSTRAINT fk_to_post_id FOREIGN KEY (to_post_id) REFERENCES post (id)
     
 );
 DESCRIBE likes;
+
+
 
 
 
