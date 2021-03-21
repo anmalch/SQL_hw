@@ -1,0 +1,55 @@
+3 задание: Написать запрос для переименования названий типов медиа (колонка name в media_types) в осмысленные для полученного дампа с данными
+(например, в "фото", "видео", ...).
+
+mysql> select * from media_types;
++----+----------+
+| id | name     |
++----+----------+
+|  2 | deserunt |
+|  1 | eaque    |
+|  3 | nam      |
+|  4 | odit     |
++----+----------+
+4 rows in set (0.00 sec)
+
+mysql> update media_types
+    -> set
+    -> name = 'foto'
+    -> where id = 2;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update media_types
+    -> set
+    -> name = 'video'
+    -> where id = 1;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update media_types
+    -> set
+    -> name = 'music'
+    -> where id = 3;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update media_types
+    -> set
+    -> name = 'audio'
+    -> where id = 4;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from media_types;
++----+-------+
+| id | name  |
++----+-------+
+|  4 | audio |
+|  2 | foto  |
+|  3 | music |
+|  1 | video |
++----+-------+
+4 rows in set (0.01 sec)
+
+mysql> exit;
+Bye
