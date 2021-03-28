@@ -171,29 +171,22 @@ CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) COMMENT 'Имя покупателя',
   birthday_at DATE COMMENT 'Дата рождения',
-  created_at VARCHAR(255), -- created_at VARCHAR
-  updated_at VARCHAR (255) -- updated_at VARCHAR
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 ) COMMENT = 'Покупатели';
 
 INSERT INTO
-  users (name, birthday_at, created_at, updated_at)
+  users (name, birthday_at)
 VALUES
-  ('Геннадий', '1990-10-05', '07.01.2016 12:05', '07.01.2016 12:05'),
-  ('Наталья', '1984-11-12', '20.05.2016 16:32', '20.05.2016 16:32'),
-  ('Александр', '1985-05-20', '14.08.2016 20:10', '14.08.2016 20:10'),
-  ('Сергей', '1988-02-14', '21.10.2016 9:14', '21.10.2016 9:14'),
-  ('Иван', '1998-01-12', '15.12.2016 12:45', '15.12.2016 12:45'),
-  ('Мария', '2006-08-29', '12.01.2017 8:56', '12.01.2017 8:56');
+  ('Геннадий', '1990-10-05'),
+  ('Наталья', '1984-11-12'),
+  ('Александр', '1985-05-20'),
+  ('Сергей', '1988-02-14'),
+  ('Иван', '1998-01-12'),
+  ('Мария', '2006-08-29');
 
-UPDATE users SET created_at = str_to_date(created_at, '%d.%m.%Y %H:%i');
 
-UPDATE users SET updated_at = str_to_date(updated_at, '%d.%m.%Y %H:%i');
 
-ALTER TABLE users MODIFY COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP;
-
-ALTER TABLE users MODIFY COLUMN updated_at DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP;
-
--- Два способа извлечения
 -- SELECT name, birthday_at FROM users WHERE MONTHNAME(birthday_at) = 'May' OR MONTHNAME(birthday_at) = 'August';
 SELECT name, birthday_at FROM users WHERE MONTHNAME(birthday_at) IN ('May', 'August');
 
